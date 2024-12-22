@@ -1,3 +1,4 @@
+import { highlightTs } from "./highlighTs.js";
 import { MdBlock } from "./parseMd.js";
 
 export const renderMd = (blocks: MdBlock[]) => {
@@ -9,7 +10,7 @@ export const renderMd = (blocks: MdBlock[]) => {
         str += `<p>${block.value}</p>`;
         break;
       case "code":
-        str += `<pre><code class="language-ts">${block.value}</code></pre>`;
+        str += `<pre><code>${highlightTs(block.value)}</code></pre>`;
         break;
       case "heading":
         str += `<h${block.level}>${block.value}</h${block.level}>`;

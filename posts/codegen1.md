@@ -44,29 +44,29 @@ What code generators do is that instead of going from text to text, they are abl
 import { factory } from "typescript";
 
 // export interface Example {
-//   a: string;
-//   b: number;
+//	 a: string;
+//	 b: number;
 // }
 
 const ast = factory.createInterfaceDeclaration(
-  [factory.createToken(ts.SyntaxKind.ExportKeyword)],
-  factory.createIdentifier("Example"),
-  undefined,
-  undefined,
-  [
-    factory.createPropertySignature(
-      undefined,
-      factory.createIdentifier("a"),
-      undefined,
-      factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
-    ),
-    factory.createPropertySignature(
-      undefined,
-      factory.createIdentifier("b"),
-      undefined,
-      factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
-    )
-  ]
+	[factory.createToken(ts.SyntaxKind.ExportKeyword)],
+	factory.createIdentifier("Example"),
+	undefined,
+	undefined,
+	[
+		factory.createPropertySignature(
+			undefined,
+			factory.createIdentifier("a"),
+			undefined,
+			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+		),
+		factory.createPropertySignature(
+			undefined,
+			factory.createIdentifier("b"),
+			undefined,
+			factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+		)
+	]
 )
 
 ```
@@ -94,15 +94,15 @@ As the input I will use the following object, which is a dictionary where each e
 
 ```ts
 const interfaces = {
-  Article: {
-    title: "string",
-    text: "string",
-    createdAt: "Date",
-  },
-  Author: {
-    name: "string",
-    age: "number",
-  },
+	Article: {
+		title: "string",
+		text: "string",
+		createdAt: "Date",
+	},
+	Author: {
+		name: "string",
+		age: "number",
+	},
 } as const;
 ```
 
@@ -126,32 +126,32 @@ const handle = await fs.open("./out/types.ts", "w");
 
 // Dictionary of supported types
 const types = {
-  string: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-  number: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-  Date: ts.factory.createTypeReferenceNode("Date"),
+	string: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+	number: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+	Date: ts.factory.createTypeReferenceNode("Date"),
 };
 
 for (const [name, properties] of Object.entries(interfaces)) {
-  // Code creating the AST
-  const ast = ts.factory.createInterfaceDeclaration(
-    [ts.factory.createToken(ts.SyntaxKind.ExportKeyword)],
-    ts.factory.createIdentifier(name),
-    undefined,
-    undefined,
-    Object.entries(properties).map(([key, type]) =>
-      ts.factory.createPropertySignature(
-        undefined,
-        ts.factory.createIdentifier(key),
-        undefined,
-        types[type]
-      )
-    )
-  );
+	// Code creating the AST
+	const ast = ts.factory.createInterfaceDeclaration(
+		[ts.factory.createToken(ts.SyntaxKind.ExportKeyword)],
+		ts.factory.createIdentifier(name),
+		undefined,
+		undefined,
+		Object.entries(properties).map(([key, type]) =>
+			ts.factory.createPropertySignature(
+				undefined,
+				ts.factory.createIdentifier(key),
+				undefined,
+				types[type]
+			)
+		)
+	);
 
-  // Convert the AST to text using printer
-  const text = printer.printNode(ts.EmitHint.Unspecified, ast, sourceFile);
+	// Convert the AST to text using printer
+	const text = printer.printNode(ts.EmitHint.Unspecified, ast, sourceFile);
 
-  await fs.appendFile(handle, text + "\n\n");
+	await fs.appendFile(handle, text + "\n\n");
 }
 
 await handle.close();
@@ -163,14 +163,14 @@ After running it with `pnpm tsx scripts/generate.ts` its output should look like
 // out/types.ts
 
 export interface Article {
-    title: string;
-    text: string;
-    createdAt: Date;
+		title: string;
+		text: string;
+		createdAt: Date;
 }
 
 export interface Author {
-    name: string;
-    age: string;
+		name: string;
+		age: string;
 }
 
 ```
