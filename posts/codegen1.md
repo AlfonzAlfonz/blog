@@ -16,7 +16,7 @@ It is not stable yet
 
 For compilers to be able to work with the code that programmers write, they need to convert the textual representation to some data structure. This data structure is called abstract syntax tree although it may sound complicated it is just a tree representation what the written code means. To illustrate this better, below is a bit simplified AST of an interface statement.
 
-```tsx
+```ts
 export interface Article {
 	title: string;
 	text: string;
@@ -39,7 +39,7 @@ TypeScript exposes APIs which allows converting between the textual representati
 
 What code generators do is that instead of going from text to text, they are able either turn arbitrary input into AST or turn the AST into any output. TypeScript exposes APIs for creating AST, unfortunately the API is very verbose, but it does not have to be written by hand usually.
 
-```tsx
+```ts
 
 import { factory } from "typescript";
 
@@ -92,7 +92,7 @@ pnpm tsx scripts/generate.ts
 
 As the input I will use the following object, which is a dictionary where each entry defines a interface, where the key is the name and its value is another dictionary, which declares properties of the interface.
 
-```tsx
+```ts
 const interfaces = {
   Article: {
     title: "string",
@@ -108,7 +108,7 @@ const interfaces = {
 
 The rest of the generator will look like this:
 
-```tsx
+```ts
 // scripts/generate.ts
 
 import ts from "typescript";
@@ -159,7 +159,7 @@ await handle.close();
 
 After running it with `pnpm tsx scripts/generate.ts` its output should look like this:
 
-```tsx
+```ts
 // out/types.ts
 
 export interface Article {

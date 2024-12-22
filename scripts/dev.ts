@@ -11,7 +11,6 @@ const server = http.createServer(async (req, res) => {
     if (r.path === req.url) {
       switch (r.type) {
         case "static": {
-          console.log({ p: r.file });
           if (r.file.endsWith(".css")) {
             res.end(
               minifyCss(await fs.readFile(r.file).then((b) => b.toString()))
