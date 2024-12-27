@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev": "tsx scripts/dev.ts",
+    "dev": "tsx watch scripts/dev.ts",
     "build": "tsx scripts/build.ts"
   },
   "keywords": [],

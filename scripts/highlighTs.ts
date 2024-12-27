@@ -37,6 +37,7 @@ const syntaxKindMap = {
   [ts.SyntaxKind.ImportKeyword]: "keyword2",
   // string-literal
   [ts.SyntaxKind.StringLiteral]: "string-literal",
+  [ts.SyntaxKind.NoSubstitutionTemplateLiteral]: "string-literal",
   // numeric-literal
   [ts.SyntaxKind.NumericLiteral]: "numeric-literal",
   // bracket
@@ -104,6 +105,22 @@ export const highlightTs = (source: string) => {
     ) {
       changes.push(["type", node.pos, node.end]);
       continue;
+    }
+
+    if (ts.isTemplateHead(node)) {
+      changes.push(["string-literal", node.pos, node.end - 2]);
+      changes.push(["keyword", node.end - 2, node.end]);
+    }
+
+    if (ts.isTemplateMiddle(node)) {
+      changes.push(["keyword", node.pos, node.pos + 1]);
+      changes.push(["string-literal", node.pos + 1, node.end - 2]);
+      changes.push(["keyword", node.end - 2, node.end]);
+    }
+
+    if (ts.isTemplateTail(node)) {
+      changes.push(["keyword", node.pos, node.pos + 1]);
+      changes.push(["string-literal", node.pos + 1, node.end]);
     }
   }
 
