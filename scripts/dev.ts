@@ -37,6 +37,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  res.statusCode = 404;
   res.end("404:(");
 });
 

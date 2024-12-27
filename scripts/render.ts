@@ -1,6 +1,6 @@
 import fs from "fs/promises";
-import { parseMd } from "./parseMd.js";
-import { renderMd } from "./renderMd.js";
+import { parseMd } from "./md/parseMd.js";
+import { renderMd } from "./md/renderMd.js";
 import { Route } from "./router.js";
 
 export const renderPost = async (r: Route & { type: "post" }) => {

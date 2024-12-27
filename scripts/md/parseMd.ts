@@ -1,14 +1,24 @@
+import { parseLeafs } from "./parseLeafs.js";
+
 export type MdBlock =
   | { type: "text"; value: string }
   | { type: "code"; lang?: string; value: string }
-  | { type: "heading"; level: number; value: string };
+  | { type: "heading"; level: number; value: string }
+  | { type: "paragraph"; value: MdLeaf[] };
+
+export type MdLeaf =
+  | { type: "text"; value: string }
+  | { type: "bold"; value: MdLeaf[] }
+  | { type: "italic"; value: MdLeaf[] }
+  | { type: "code"; value: MdLeaf[] };
 
 export const parseMd = (source: string) => {
   let state: MdBlock[] = [{ type: "text", value: source }];
 
   state = separateCode(state);
-  state = separateParagraphs(state);
+  state = separateText(state);
   state = separateHeadings(state);
+  state = separateParagraphs(state);
 
   return state;
 };
@@ -40,7 +50,7 @@ export const separateCode = (source: MdBlock[]) => {
   });
 };
 
-export const separateParagraphs = (source: MdBlock[]) => {
+export const separateText = (source: MdBlock[]) => {
   return flatMapBlock(source, "text", (p) =>
     p.value
       .split("\n\n")
@@ -78,8 +88,24 @@ export const separateHeadings = (source: MdBlock[]) => {
   });
 };
 
+const separateParagraphs = (source: MdBlock[]) => {
+  return flatMapBlock(source, "text", (p) => {
+    const [leafs, rest] = parseLeafs(p.value, "text");
+    if (rest.length) {
+      leafs.push({ type: "text", value: rest });
+    }
+    console.log(p.value.length, p.value);
+    console.dir(leafs, { depth: 1000 });
+
+    return [{ type: "paragraph", value: leafs }];
+  });
+};
+
 const flatMapBlock = <T extends MdBlock["type"]>(
   value: MdBlock[],
   type: T,
   fn: (b: MdBlock & { type: T }) => MdBlock[]
-) => value.flatMap((v) => (v.type === type ? fn(v as never) : [v]));
+) =>
+  value
+    .flatMap((v) => (v.type === type ? fn(v as never) : [v]))
+    .filter((x) => x.value.length);

@@ -55,11 +55,15 @@ li {
 pre {
   margin: 1rem -1rem;
   padding: 1rem;
+  color: #D4D4D4;
   background: #1e1e1e;
-  color: #9cdcfe;
   tab-size: 2;
   font-size: 13px;
   line-height: 1.4;
+}
+
+pre.ts {
+  color: #9cdcfe;
 }
 
 .ts-keyword {
