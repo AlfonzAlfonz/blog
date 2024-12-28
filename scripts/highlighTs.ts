@@ -88,6 +88,10 @@ export const highlightTs = (source: string) => {
       add("type", node);
     }
 
+    if (ts.isIdentifier(node) && node.text === "undefined") {
+      add("keyword", node);
+    }
+
     if (ts.isCallExpression(node)) {
       if (ts.isPropertyAccessExpression(node.expression)) {
         add("call", node.expression.name);
