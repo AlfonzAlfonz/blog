@@ -22,7 +22,6 @@ export const renderMd = (blocks: MdBlock[]) => {
         break;
       case "paragraph":
         str += `<p>${renderLeafs(block.value)}</p>`;
-        console.log(str);
         break;
       default:
         block satisfies never;
@@ -38,7 +37,7 @@ const renderLeafs = (source: MdLeaf[]): string => {
     if (leaf.type === "text") {
       str += leaf.value;
     } else {
-      const inner = renderLeafs(leaf.value);
+      const inner = "value" in leaf ? renderLeafs(leaf.value) : "";
 
       switch (leaf.type) {
         case "bold":
@@ -50,6 +49,14 @@ const renderLeafs = (source: MdLeaf[]): string => {
         case "code":
           str += `<code>${inner}</code>`;
           break;
+        case "link":
+          str += `<a href="${leaf.href}">${inner}</a>`;
+          break;
+        case "img":
+          str += `<img src="${leaf.src}" alt="${leaf.alt}" />`;
+          break;
+        default:
+          leaf satisfies never;
       }
     }
   }

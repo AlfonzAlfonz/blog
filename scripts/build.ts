@@ -10,6 +10,10 @@ const routes = getAllRoutes();
 for await (const route of routes) {
   const targetPath = path.join("dist", route.path.slice(1));
 
+  if (path.basename(targetPath).startsWith(".")) {
+    continue;
+  }
+
   await fs.mkdir(path.dirname(targetPath), { recursive: true });
 
   switch (route.type) {

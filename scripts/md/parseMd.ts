@@ -10,7 +10,9 @@ export type MdLeaf =
   | { type: "text"; value: string }
   | { type: "bold"; value: MdLeaf[] }
   | { type: "italic"; value: MdLeaf[] }
-  | { type: "code"; value: MdLeaf[] };
+  | { type: "code"; value: MdLeaf[] }
+  | { type: "link"; href: string; value: MdLeaf[] }
+  | { type: "img"; src: string; alt: string };
 
 export const parseMd = (source: string) => {
   let state: MdBlock[] = [{ type: "text", value: source }];
@@ -94,8 +96,6 @@ const separateParagraphs = (source: MdBlock[]) => {
     if (rest.length) {
       leafs.push({ type: "text", value: rest });
     }
-    console.log(p.value.length, p.value);
-    console.dir(leafs, { depth: 1000 });
 
     return [{ type: "paragraph", value: leafs }];
   });
