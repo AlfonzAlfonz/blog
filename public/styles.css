@@ -43,6 +43,17 @@ footer {
   padding-bottom: 50px;
 }
 
+article {
+  margin-bottom: 3rem;
+}
+
+article h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: .5rem;
+}
+
 ul {
   list-style-type: "- ";
   padding-left: 1rem;

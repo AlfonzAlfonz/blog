@@ -1,23 +1,25 @@
 import fs from "fs/promises";
 import http from "http";
 import { minifyCss } from "./minifyCss.js";
-import { renderPost } from "./render.js";
+import { renderPost, renderPostList } from "./render.js";
 import { getAllRoutes } from "./router.js";
 
 const server = http.createServer(async (req, res) => {
   try {
-    const routes = getAllRoutes();
+    const routes = getAllRoutes(true);
 
     for await (const r of routes) {
       if (r.path === req.url) {
         switch (r.type) {
           case "static": {
-            if (r.file.endsWith(".css")) {
+            if (r.filename.endsWith(".css")) {
               res.end(
-                minifyCss(await fs.readFile(r.file).then((b) => b.toString()))
+                minifyCss(
+                  await fs.readFile(r.filename).then((b) => b.toString())
+                )
               );
             } else {
-              const handle = await fs.open(r.file);
+              const handle = await fs.open(r.filename);
               const buffer = await handle.readFile();
               res.end(buffer);
               await handle.close();
@@ -29,9 +31,9 @@ const server = http.createServer(async (req, res) => {
             res.end(await renderPost(r));
             return;
           }
-          case "pagination": {
-            const html = await fs.readFile("./index.html");
-            res.end(html);
+          case "post-list": {
+            res.setHeader("Content-type", "text/html");
+            res.end(await renderPostList(r));
             return;
           }
         }

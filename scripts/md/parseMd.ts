@@ -1,3 +1,4 @@
+import { parseFrontMatter } from "./parseFrontMatter.js";
 import { parseLeafs } from "./parseLeafs.js";
 
 export type MdBlock =
@@ -15,14 +16,15 @@ export type MdLeaf =
   | { type: "img"; src: string; alt: string };
 
 export const parseMd = (source: string) => {
-  let state: MdBlock[] = [{ type: "text", value: source }];
+  const [data, md] = parseFrontMatter(source);
+  let state: MdBlock[] = [{ type: "text", value: md }];
 
   state = separateCode(state);
   state = separateText(state);
   state = separateHeadings(state);
   state = separateParagraphs(state);
 
-  return state;
+  return [data, state] as const;
 };
 
 export const separateCode = (source: MdBlock[]) => {
